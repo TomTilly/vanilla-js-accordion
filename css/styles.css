@@ -44,6 +44,18 @@ body {
   transition: 0.1s background-color linear;
 }
 
+.accordion__header::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background: url('../images/down-chevron.svg');
+  transition: 0.1s transform linear;
+}
+
+.accordion__header[aria-selected='true']::after {
+  transform: rotate(180deg);
+}
+
 .accordion__panel:not(:last-child) .accordion__header {
   border-bottom: 1px solid #dedede;
 }
@@ -72,8 +84,7 @@ body {
   overflow: hidden;
 }
 
-.accordion__panel:not(:last-child)
-  .accordion__panel-content[aria-hidden='false'] {
+.accordion__panel:not(:last-child) .accordion__panel-content {
   border-bottom: 1px solid #dedede;
 }
 
@@ -87,14 +98,4 @@ body {
 
 .accordion__panel-content-inner-wrapper > *:last-child {
   margin-bottom: 0;
-}
-
-.accordion__chevron {
-  width: 16px;
-  height: 16px;
-  transition: 0.1s transform linear;
-}
-
-.accordion__header[aria-selected='true'] .accordion__chevron {
-  transform: rotate(180deg);
 }

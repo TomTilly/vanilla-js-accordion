@@ -16,7 +16,7 @@ class Accordion {
     };
 
     this.panels.forEach((panel, i) => {
-      const isOpenByDefault = i === 0;
+      const isOpen = i === 0;
       const panelHeader = panel.querySelector('.accordion__header');
       const panelContent = panel.querySelector('.accordion__panel-content');
       const panelHeaderId = `acc-${this.accordionId}-header-${i}`;
@@ -24,25 +24,21 @@ class Accordion {
 
       panelHeader.id = panelHeaderId;
       panelHeader.setAttribute('role', 'tab');
-      panelHeader.setAttribute(
-        'aria-controls',
-        `acc-${this.accordionId}-panel-${i}`
-      );
-      panelHeader.setAttribute('aria-selected', isOpenByDefault);
-      panelHeader.setAttribute('aria-expanded', isOpenByDefault);
+      panelHeader.setAttribute('aria-controls', panelContentId);
+      panelHeader.setAttribute('aria-selected', isOpen);
+      panelHeader.setAttribute('aria-expanded', isOpen);
       panelHeader.tabIndex = '0';
 
       panelContent.id = panelContentId;
       panelContent.setAttribute('role', 'tabpanel');
-      panelContent.setAttribute('aria-hidden', !isOpenByDefault);
-      panelContent.hidden = !isOpenByDefault;
+      panelContent.hidden = !isOpen;
       panelContent.setAttribute('aria-labelledby', panelHeaderId);
-      panelContent.style.opacity = isOpenByDefault ? '1' : '0';
-      panelContent.style.height = isOpenByDefault
+      panelContent.style.opacity = isOpen ? '1' : '0';
+      panelContent.style.height = isOpen
         ? `${panelContent.scrollHeight}`
         : `0px`;
 
-      panelHeader.addEventListener('click', (e) => {
+      panelHeader.addEventListener('click', () => {
         if (panel === this.activePanel || this.state.isAnimating) return;
         this.state.isAnimating = true;
         this.togglePanel(this.activePanel); // close active panel
@@ -70,8 +66,9 @@ class Accordion {
 
   static accordionCount = 0; // Used to create unique ids for each accordion
 
+  initHeaderDefaults() {}
+
   togglePanel(panel) {
-    // const animationSpeed = 200; // milliseconds
     const animationSpeed = 200; // milliseconds
     const panelHeader = panel.querySelector('.accordion__header');
     const panelContent = panel.querySelector('.accordion__panel-content');
@@ -81,7 +78,6 @@ class Accordion {
 
     panelHeader.setAttribute('aria-selected', newValue);
     panelHeader.setAttribute('aria-expanded', newValue);
-    panelContent.setAttribute('aria-hidden', !newValue);
 
     if (newValue) {
       // Animate panel open
