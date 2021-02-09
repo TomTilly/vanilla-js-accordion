@@ -66,20 +66,18 @@ class Accordion {
 
   static accordionCount = 0; // Used to create unique ids for each accordion
 
-  initHeaderDefaults() {}
-
   togglePanel(panel) {
     const animationSpeed = 200; // milliseconds
     const panelHeader = panel.querySelector('.accordion__header');
     const panelContent = panel.querySelector('.accordion__panel-content');
-    const newValue = !(panelHeader.getAttribute('aria-selected') === 'true');
-    if (newValue) panelContent.removeAttribute('hidden');
+
+    const isOpen = !(panelHeader.getAttribute('aria-selected') === 'true');
+    if (isOpen) panelContent.removeAttribute('hidden');
     const fullHeight = panelContent.scrollHeight;
+    panelHeader.setAttribute('aria-selected', isOpen);
+    panelHeader.setAttribute('aria-expanded', isOpen);
 
-    panelHeader.setAttribute('aria-selected', newValue);
-    panelHeader.setAttribute('aria-expanded', newValue);
-
-    if (newValue) {
+    if (isOpen) {
       // Animate panel open
       animate(function draw(progress) {
         const newHeight = progress * fullHeight;
