@@ -1,4 +1,5 @@
 import animate from './animate.js';
+import Panel from './panel.js';
 
 class Accordion {
   constructor(el) {
