@@ -4,18 +4,18 @@ class Panel {
   constructor(panelEl, index, accordion) {
     this.domEl = panelEl;
     this.parentAccordion = accordion;
-    this._isOpen = index === 0; // First panel is active
     this.panelId = `acc-${accordion.id}-panel-${index}`;
-    this.panelContentId = `acc-${accordion.id}-content-${index}`;
-    this.panelHeaderId = `acc-${accordion.id}-header-${index}`;
-
     this.panelHeader = this.domEl.querySelector('.accordion__header');
+    this.panelContent = this.domEl.querySelector('.accordion__panel-content');
+    this.panelHeaderId = `acc-${accordion.id}-header-${index}`;
+    this.panelContentId = `acc-${accordion.id}-content-${index}`;
+    this.isOpen = index === 0; // First panel is active
+
     this.panelHeader.id = this.panelHeaderId;
     this.panelHeader.setAttribute('role', 'tab');
     this.panelHeader.setAttribute('aria-controls', this.panelContentId);
     this.panelHeader.tabIndex = '0';
 
-    this.panelContent = this.domEl.querySelector('.accordion__panel-content');
     this.panelContent.id = this.panelContentId;
     this.panelContent.setAttribute('role', 'tabpanel');
     this.panelContent.setAttribute('aria-labelledby', this.panelHeaderId);
@@ -38,18 +38,17 @@ class Panel {
 
   handleActivate(event) {
     if (this.isOpen) return;
-    console.log(this.parentAccordion);
     this.parentAccordion.togglePanels(event, this.panelId);
   }
 
-  async animate(isOpening) {
+  async animate(shouldOpen) {
     const animationSpeed = 200; // milliseconds
     const fullHeight = this.panelContent.scrollHeight;
 
     await animate((progress) => {
       let newHeight;
       let newOpacity;
-      if (isOpening) {
+      if (shouldOpen) {
         newHeight = progress * fullHeight;
         newOpacity = progress * 1;
       } else {
@@ -62,7 +61,7 @@ class Panel {
     }, animationSpeed);
 
     this.parentAccordion.isAnimating = false;
-    if (isOpening) {
+    if (shouldOpen) {
       this.panelContent.style.height = 'auto';
     } else {
       this.panelContent.hidden = true;

@@ -6,27 +6,16 @@ class Accordion {
       throw new Error('No element passed into Accordion');
     }
 
-    this.domEl = el;
-    this.id = Accordion.accordionCount;
-    this.domEl.setAttribute('role', 'tablist');
+    el.setAttribute('role', 'tablist');
     this.togglePanels = this.togglePanels.bind(this);
-    this.panels = Array.from(
-      this.domEl.querySelectorAll('.accordion__panel')
-    ).map(
-      (domPanel, i) => new Panel(domPanel, i, this, this.id, this.togglePanels)
+    this.id = Accordion.accordionCount;
+    this.panels = Array.from(el.querySelectorAll('.accordion__panel')).map(
+      (domPanel, i) => new Panel(domPanel, i, this, this.id)
     );
-    this._isAnimating = false;
     this.activePanelId = this.panels[0].panelId;
+    this.isAnimating = false;
 
     Accordion.accordionCount += 1;
-  }
-
-  get isAnimating() {
-    return this._isAnimating;
-  }
-
-  set isAnimating(isAnimating) {
-    this._isAnimating = isAnimating;
   }
 
   togglePanels(event, activatedPanelId) {
